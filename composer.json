@@ -1,0 +1,13 @@
+  {
+    "require": {
+      "php": "8.1.*",
+      "google/cloud-storage": "^2.0",
+      "google/cloud-datastore": "^1.27",
+      "google/cloud-firestore": "*"
+    },
+    "autoload": {
+      "psr-4": {
+        "App\\": "App/"
+      }
+    }
+  }
