@@ -3,7 +3,6 @@
 Namespace App\Controllers;
 
 use App\Route;
-use App\Models\User;
 use App\Models\Auth;
 
 Class AuthController extends Controller {
@@ -16,30 +15,22 @@ Class AuthController extends Controller {
     }
 
         /**
-     * Validates login form and tries to login user.
-     * @var array
+     * Log the user out of the system.
+     * @var string
      */
-    public static function login($request){
+    public static function Login($request) {
 
-        $user = Auth::validate($request['userID'], $request['password']);
+    
+        $successful_login = Auth::Login($request['id'],$request['password']);
 
-        if(empty($user)){
-            // If validation fails, return user to login with errors.
-            Route::Redirect('/', null, ['Invalid Login' => 'ID or password is invalid']);
+        if(!$successful_login) {
+            // If Validation fails, return user to login with errors.
+            $_SESSION['errors'] = ['Invalid Login' => 'User ID or password is invalid.'];
+            Route::Redirect('/'); 
         }
 
-        // Begin User Session
-        Auth::Login($user);
         // Successful Login - Reroute to Dashboard
         Route::Redirect('/');
-    }
-
-
-    /**
-     * Display register page.
-     */
-    public static function register() {
-        return new AuthController('auth/register');
     }
 
     /**
@@ -48,6 +39,13 @@ Class AuthController extends Controller {
      */
     public static function Logout() {
         Auth::Logout();
+    }
+
+        /**
+     * Display register page.
+     */
+    public static function register() {
+        return new AuthController('auth/register');
     }
 
 }

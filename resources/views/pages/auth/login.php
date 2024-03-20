@@ -4,14 +4,12 @@
 
     <!-- Login Form -->
     <div class="form-floating mb-3">
-      <input type="id" class="form-control" name="userID" id="userID"  value="" placeholder="Login">
-      <label for="userID">User ID</label>
-      <span>placeholder for invalid messages</span>
+      <input type="id" class="form-control" name="id" id="id"  placeholder="User ID">
+      <label >User ID</label>
     </div>
     <div class="form-floating mb-3">
       <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-      <label for="Password">Password</label>
-      <span>placeholder for invalid messages</span>
+      <label for="floatingPassword">Password</label>
     </div>
     <button class="w-100 mb-3 btn btn-lg btn-primary" type="submit">Sign in</button>
     <!-- End Login Form -->

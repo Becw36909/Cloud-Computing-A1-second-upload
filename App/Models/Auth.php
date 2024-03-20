@@ -1,36 +1,38 @@
-<?php
+<?php 
 
 namespace App\Models;
-use App\Models\User;
+
 use App\Route;
 
-class Auth 
-{
-    public static function validate($userID, $password) {
+class Auth {
 
-        if(empty($userID) || empty($password)){
+    public static function Login($id, $password) {
+
+        if(empty($id) || empty($password)) {
             return false;
         }
-    
-        $user = User::find($userID);
+        
+        $user = User::Find($id);
 
-        if(!$user || $user['password'] != $password){
+        if(!$user || $user->password != $password) {
             return false;
         }
-        else {
-            return new User($user);
-        }
+
+        self::StartSession($user);
+
+        return true;
     }
 
-    public static function Login($user){
+    private static function StartSession($user) {
         // Begin session and set user.
-        $_SESSION['logged in'] = true;
+        $_SESSION['logged_in'] = true;
         $_SESSION['user'] = [
-        'userID' => $user->userID,
+            'id' => $user->id,
+            'user_name' => $user->user_name,
         ];
     }
 
-    public static function logout(){
+    public static function logout() {
         // Destroy session to log user out.
         session_unset();
         session_destroy();
@@ -38,4 +40,6 @@ class Auth
         // Reroute user to login.
         Route::Redirect('/');
     }
+
+
 }
