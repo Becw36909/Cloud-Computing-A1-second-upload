@@ -25,7 +25,9 @@ class Route {
             switch($url) {
                 case '/' : return AuthController::index(); break;
                 case '/login' : return AuthController::Login($_POST); break;
-                case '/register' : return AuthController::register(); break;
+                case '/register' : return AuthController::Register(); break;
+                case '/register/store' : return AuthController::RegisterUser($_POST); break;
+
                 default:  self::Redirect('/'); break;
             }
         }

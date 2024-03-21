@@ -1,15 +1,16 @@
-<?php 
+<?php
 
 namespace App\Models;
 
 use App\Database;
-use Google\Cloud\Datastore\Query\Query;
 
-class User {
+class User
+{
 
     public $id, $user_name, $password;
 
-    function __construct($user) {
+    function __construct($user)
+    {
         $this->id = $user['id'];
         $this->user_name = $user['user_name'];
         $this->password = $user['password'];
@@ -29,25 +30,65 @@ class User {
     // // //     return $user;
     // // // }
 
-    // Find user by email address
-    public static function Find($user_id) {
+    // Find user by user ID
+    public static function Find($user_id)
+    {
 
         $datastore = Database::Client();
 
         $query = $datastore->query()
-                           ->kind('users');             
-        
+            ->kind('user');
+
         $results = $datastore->runQuery($query);
 
-        foreach($results as $user) {
-            if($user['ID'] == $user_id) {
+        foreach ($results as $user) {
+            if ($user['id'] == $user_id) {
                 return new User($user);
             }
         }
 
         // Return false if user cannot be found
         return false;
-
     }
+
+    // Find user by username
+    public static function FindByUsername($username)
+    {
+
+        $datastore = Database::Client();
+
+        $query = $datastore->query()
+            ->kind('user');
+
+        $results = $datastore->runQuery($query);
+
+        foreach ($results as $user) {
+            if ($user['user_name'] == $username) {
+                return new User($user);
+            }
+        }
+
+        // Return false if user cannot be found
+        return false;
+    }
+
+    // Find user by username
+    public static function CreateNewUser($id, $username, $password)
+    {
+
+        $datastore = Database::Client();
+
+        // Create a user entity to insert into datastore.
+        $key = $datastore->key('user');
+        $entity = $datastore->entity($key, [
+            'id' => $id,
+            'user_name' => $username,
+            'password' => $password,
+        ]);
+        $datastore->insert($entity);
+    }
+        
+
+
 
 }

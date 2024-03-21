@@ -15,7 +15,7 @@ Class AuthController extends Controller {
     }
 
         /**
-     * Log the user out of the system.
+     * Log the user into the system.
      * @var string
      */
     public static function Login($request) {
@@ -44,8 +44,35 @@ Class AuthController extends Controller {
         /**
      * Display register page.
      */
-    public static function register() {
+    public static function Register() {
+
+
         return new AuthController('auth/register');
     }
 
+    /**
+     * Register New User
+     */
+    public static function RegisterUser() {
+        
+        if(isset($request)){
+            if(!Auth::CheckID($request['id'])) {
+                // If Validation fails, return user to registration page with errors.
+                $_SESSION['errors'] = ['Invalid ID' => 'User ID is already in use.'];
+                Route::Redirect('auth/register'); 
+            }
+    
+            if(!Auth::CheckUsername($request['username'])) {
+                // If Validation fails, return user to registration page with errors.
+                $_SESSION['errors'] = ['Invalid Username' => 'User Name is already in use.'];
+                Route::Redirect('auth/register'); 
+            }
+    
+            else (Auth::Register($request['id'],$request['username'],$request['password']));
+            // Return user to login page with success message.
+            $_SESSION['success'] = ['Registration Successful!'];
+            Route::Redirect('auth/login'); 
+        }
+    }
+    
 }
