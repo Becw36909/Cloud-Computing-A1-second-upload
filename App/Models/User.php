@@ -16,20 +16,6 @@ class User
         $this->password = $user['password'];
     }
 
-    // // // public static function Store($userId) {
-
-    // // //     $datastore = Database::Client();
-    // // //     // The Cloud Datastore key for the new entity
-    // // //     $taskKey = $datastore->key('kind', 'name');
-    // // //     // Prepares the new entity
-    // // //     $task = $datastore->entity($taskKey, ['description' => 'description']);
-    // // //     // Saves the entity
-    // // //     $datastore->upsert($task);
-
-
-    // // //     return $user;
-    // // // }
-
     // Find user by user ID
     public static function Find($user_id)
     {
@@ -72,8 +58,8 @@ class User
         return false;
     }
 
-    // Find user by username
-    public static function CreateNewUser($id, $username, $password)
+    // Create/Store a new user in datastore
+    public static function Register($id, $username, $password)
     {
 
         $datastore = Database::Client();

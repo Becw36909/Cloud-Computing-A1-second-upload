@@ -41,38 +41,23 @@ class Auth {
         Route::Redirect('/');
     }
 
-    public static function CheckID($id) {
-
-        if(empty($id)) {
-            return false;
-        }
-        
-        $userID = User::Find($id);
-
-        if($userID->id == $id) {
-            return false;
-        }
-
-        return true;
+    public static function CheckID($id)
+    {
+        if (User::Find($id)) {
+            return true;
+        } 
     }
 
-    public static function CheckUsername($username) {
-
-        if(empty($username)) {
-            return false;
-        }
-        $userName = User::FindByUsername($username);
-
-        if($userName->user_name == $username) {
-            return false;
-        }
-
-        return true;
+    public static function CheckUsername($username)
+    {
+        if (User::FindByUsername($username)) {
+            return true;
+        } 
     }
 
     public static function Register($id, $username, $password) {
 
-        User::CreateNewUser($id, $username, $password);
+        User::Register($id, $username, $password);
 
         return true;
     }

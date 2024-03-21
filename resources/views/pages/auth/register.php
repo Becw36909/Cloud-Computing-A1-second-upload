@@ -9,7 +9,7 @@
     </div>
     <div class="form-floating mb-3">
       <input type="text" class="form-control" name="username" id="username"  placeholder="User Name">
-      <label >User ID</label>
+      <label >User Name</label>
     </div>
     <div class="form-floating mb-3">
       <input type="password" class="form-control" name="password" id="password" placeholder="Password">

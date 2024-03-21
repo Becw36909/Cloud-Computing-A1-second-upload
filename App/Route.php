@@ -15,7 +15,7 @@ class Route {
         if(isset($_SESSION['user'])) {
             switch($url) {
                 case '/' : return PostController::Index(); break;
-                // case '/post/store' : return PostController::Store($_POST); break;
+                case '/post/store' : return PostController::Store($_POST); break;
                 case '/user' : return UserController::Show(); break;
                 case '/logout' : return AuthController::Logout(); break;
                 default:  self::Redirect('/'); break;
@@ -31,8 +31,6 @@ class Route {
                 default:  self::Redirect('/'); break;
             }
         }
-
-
 
 
     }
