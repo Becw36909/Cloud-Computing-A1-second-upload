@@ -57,29 +57,45 @@ class Post
         ]);
         $datastore->insert($entity);
     }
-        
-    public static function FindRecentPosts($id)
-{
-    $datastore = Database::Client();
 
-    $limit = 10;
+    public static function FindUserPosts($id)
+    {
+        $datastore = Database::Client();
 
-    $query = $datastore->query()
-        ->kind('post')
-        ->filter('id', '=', $id) // Filter by user ID
-        ->order('datetime', 'DESC') // Assuming 'datetime' is the property representing the date and time posted
-        ->limit($limit);
+        $query = $datastore->query()
+            ->kind('post')
+            ->filter('id', '=', $id) // Filter by user ID
+            ->order('datetime', 'DESCENDING'); // Assuming 'datetime' is the property representing the date and time posted
 
-    $results = $datastore->runQuery($query);
+        $results = $datastore->runQuery($query);
 
-    $posts = [];
-    foreach ($results as $post) {
-        $posts[] = new Post($post);
+        $posts = [];
+        foreach ($results as $post) {
+            $posts[] = new Post($post);
+        }
+
+        return $posts;
     }
 
-    return $posts;
-}
+    public static function FindRecentPosts()
+    {
+        $datastore = Database::Client();
 
+        $limit = 10;
 
+        $query = $datastore->query()
+            ->kind('post')
+            ->order('datetime', 'DESCENDING') // Assuming 'datetime' is the property representing the date and time posted
+            ->limit($limit);
+
+        $results = $datastore->runQuery($query);
+
+        $posts = [];
+        foreach ($results as $post) {
+            $posts[] = new Post($post);
+        }
+
+        return $posts;
+    }
 
 }

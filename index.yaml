@@ -1,2 +1,8 @@
 indexes:
-
+- kind: post
+  properties:
+  - name: id
+  - name: datetime
+    direction: desc
+  - name: subject
+  - name: message

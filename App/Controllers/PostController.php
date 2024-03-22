@@ -1,45 +1,48 @@
 <?php
 
-Namespace App\Controllers;
+namespace App\Controllers;
 
 use App\Route;
+use App\Models\Post;
 
-Class PostController extends Controller {
+class PostController extends Controller
+{
 
     /**
      * Shows the logged in dashboard
      */
-    public static function Index() {
+    public static function Index()
+    {
+        $posts = Post::FindRecentPosts();
 
+        // Check if no posts are found
+        if (empty($posts)) {
 
-        $posts = FindRecentPosts($_SESSION['user']['id']);
+            $posts = null;
+        }
 
         return new PostController(
-            'post/index', 
-            [ 
+            'post/index',
+            [
                 'posts' => $posts
             ]
         );
-
     }
 
-        /**
-     * Stores the logged in user post
+
+    /**
+     * Stores the logged in user's post
      */
-    public static function Store($request) {
+    public static function Store($request)
+    {
 
         if (empty($request['subject']) || empty($request['message'])) {
             // If Validation fails, return user to registration page with errors.
             $_SESSION['errors'] = ['Post must have a subject and message.'];
-            Route::Redirect('/register');
-        }
-
-        else (Post::Store($_SESSION['user']['id'], $request['subject'], $request['message']));
-        // Return user to login page with success message.
+            Route::Redirect('/');
+        } else (Post::Store($_SESSION['user']['id'], $request['subject'], $request['message']));
+        // Return user to dashboard page with success message.
         $_SESSION['success'] = 'Successfully created new post!';
         Route::Redirect('/');
     }
-
-    }
-
 }
