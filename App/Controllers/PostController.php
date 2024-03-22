@@ -15,12 +15,6 @@ class PostController extends Controller
     {
         $posts = Post::FindRecentPosts();
 
-        // Check if no posts are found
-        if (empty($posts)) {
-
-            $posts = null;
-        }
-
         return new PostController(
             'post/index',
             [

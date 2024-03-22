@@ -73,8 +73,21 @@ class User
         ]);
         $datastore->insert($entity);
     }
+
+    // Update user password
+    public function UpdatePassword($newPassword)
+    {
+
+        $datastore = Database::Client();
+
+        $transaction = $datastore->transaction();
+        $key = $datastore->key('user', 5700433016258560);
+        $user = $transaction->lookup($key);
+        $user['password'] = $newPassword;
+        $transaction->update($user);
+        $transaction->commit();
         
-
-
+    }
+            
 
 }

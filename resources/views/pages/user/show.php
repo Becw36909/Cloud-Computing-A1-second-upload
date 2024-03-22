@@ -1,7 +1,51 @@
 <main class="container mx-auto">
-<p>This is the User Admin page. You can get any user details from the $_SESSION variable</p>
-<ul>
-    <li>ID : <?php echo $_SESSION['user']['id'] ?></li>
-    <li>Username : <?php echo $_SESSION['user']['user_name'] ?></li>
-</ul>
+    <div class="row gx-5">
+        <div class="col-lg-3 p-3 text-center">
+            <img src="https://placehold.co/120" />
+            <h2 class="fw-normal">
+                <a href="/user"><?php echo $_SESSION['user']['user_name'] ?></a>
+            </h2>
+        </div>
+
+        <br>
+        <br>
+        
+        <div class="col-lg-9">
+            <form action="/user/update" method="post">
+                <h5>Password Edit Area</h5>
+                <div class="mb-3">
+                    <label for="oldPassword" class="form-label">Old Password</label>
+                    <input type="password" class="form-control" id="oldPassword" name="oldPassword">
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword">
+                </div>
+                <button type="submit" class="btn btn-primary">Change</button>
+            </form>
+
+            <h5>User Post Edit Area</h5>
+            <?php if (empty($userPosts)) : ?>
+                <div class="alert alert-info" role="alert">
+                    No posts found.
+                </div>
+            <?php else : ?>
+                <?php foreach ($userPosts as $post) : ?>
+                    <div class="row border border-2 rounded-3 shadow-sm p-3 mb-3">
+                        <div class="col-lg-4">
+                            <img src="https://placehold.co/200" />
+                        </div>
+                        <div class="col-lg-6 p-3">
+                            <p><strong>Date and Time Posted:</strong> <?php echo $post->datetime->format('d-m-Y H:i'); ?></p>
+                            <p><strong>Subject:</strong> <?php echo $post->subject; ?></p>
+                            <p><strong>Message:</strong> <?php echo $post->message; ?></p>
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="/post/edit/<?php echo $post->id; ?>" class="btn btn-primary">Edit</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
 </main>

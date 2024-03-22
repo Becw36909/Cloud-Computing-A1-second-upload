@@ -84,23 +84,18 @@ class Post
     public static function FindRecentPosts()
     {
         $datastore = Database::Client();
+        $posts = [];
+
 
         $query = $datastore->query()
             ->kind('post')
-            ->order('datetime', 'DESCENDING') // Assuming 'datetime' is the property representing the date and time posted
+            ->order('datetime', 'DESCENDING') 
             ->limit(10);
 
         $results = $datastore->runQuery($query);
 
-        $posts = [];
         foreach ($results as $entity) {
-            $post = new Post([
-                'id' => $entity['id'],
-                'subject' => $entity['subject'],
-                'message' => $entity['message'],
-                'datetime' => ($entity['datetime'] instanceof DateTime) ? $entity['datetime']->format('Y-m-d H:i:s') : $entity['datetime']
-            ]);
-            $posts[] = $post;
+            $posts[] = new Post($entity);
         }
 
         return $posts;
