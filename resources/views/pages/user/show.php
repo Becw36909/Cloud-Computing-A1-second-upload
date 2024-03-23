@@ -41,7 +41,7 @@
                             <p><strong>Message:</strong> <?php echo $post->message; ?></p>
                         </div>
                         <div class="col-lg-2">
-                            <a href="/post/edit?<?php echo $post->key; ?>" class="btn btn-primary">Edit</a>
+                            <a href="/post/edit?key=<?php echo $post->key; ?>" class="btn btn-primary">Edit</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

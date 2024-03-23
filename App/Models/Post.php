@@ -43,21 +43,22 @@ class Post
         $datastore->insert($entity);
     }
 
-    // Find post by user ID
+    // Find post by post key
     public static function Find($key)
     {
 
         $datastore = Database::Client();
+        $key = $datastore->key('post', $key);
 
         $query = $datastore->query()
-            ->kind('post');
+            ->kind('post')
+            ->filter('__key__', '=', $key ); // Filter by user ID
 
         $results = $datastore->runQuery($query);
 
         foreach ($results as $post) {
-            if ($post['key'] == $key) {
                 return new Post($post);
-            }
+            
         }
 
         // Return false if post cannot be found
@@ -90,22 +91,21 @@ class Post
     {
 
         $datastore = Database::Client();
+        $posts = [];
+
 
         $query = $datastore->query()
-            ->kind('post');
+            ->kind('post')
+            ->filter('id', '=', $id); // Filter by user ID
 
         $results = $datastore->runQuery($query);
 
-        $posts = [];
 
-        foreach ($results as $post) {
-            if ($post['id'] == $id) {
-                $posts[] = new Post($post);
-            }
-            return $posts;
+        foreach ($results as $entity) {
+            $posts[] = new Post($entity);
         }
-                // Return false if posts cannot be found
-                return false;
+
+        return $posts;
     }
 
     // Find all posts
@@ -129,16 +129,17 @@ class Post
         return $posts;
     }
 
-    // Update post - FINISH
-    public function UpdatePost($newPassword)
+    // Update post 
+    public function UpdatePost($subject, $message)
     {
 
         $datastore = Database::Client();
 
         $transaction = $datastore->transaction();
-        $key = $datastore->key('user', $this->key);
+        $key = $datastore->key('post', $this->key);
         $user = $transaction->lookup($key);
-        $user['password'] = $newPassword;
+        $user['subject'] = $subject;
+        $user['message'] = $message;
         $transaction->update($user);
         $transaction->commit();
     }

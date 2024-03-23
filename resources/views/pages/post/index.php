@@ -12,7 +12,7 @@
 
             <form action="/post/store" method="post">
                 <h5>Create a new post</h5>
-                <textarea class="form-control" input type="text" id="subject" name="subject" rows="1" placeholder="Subject"></textarea>
+                <input class="form-control" input type="text" id="subject" name="subject" rows="1" placeholder="Subject"></input>
 
                 <textarea class="form-control" id="message" name="message" rows="3" placeholder="Whats on your mind..."></textarea>
 
