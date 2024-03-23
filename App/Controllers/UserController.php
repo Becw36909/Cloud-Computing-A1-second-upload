@@ -10,6 +10,9 @@ use App\Models\Post;
 
 Class UserController extends Controller {
 
+        /**
+     * Shows the user profile
+     */
     public static function Show() {
 
         $posts = Post::FindUserPosts($_SESSION['user']['id']);

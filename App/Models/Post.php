@@ -44,7 +44,7 @@ class Post
     }
 
     // Find post by user ID
-    public static function Find($id)
+    public static function Find($key)
     {
 
         $datastore = Database::Client();
@@ -55,7 +55,7 @@ class Post
         $results = $datastore->runQuery($query);
 
         foreach ($results as $post) {
-            if ($post['id'] == $id) {
+            if ($post['key'] == $key) {
                 return new Post($post);
             }
         }
@@ -66,23 +66,46 @@ class Post
 
 
     // Find all post by user ID
+    // public static function FindUserPosts($id)
+    // {
+    //     $datastore = Database::Client();
+
+    //     $query = $datastore->query()
+    //         ->kind('post')
+    //         ->filter('id', '=', $id) // Filter by user ID
+    //         ->order('datetime', 'DESCENDING'); // Assuming 'datetime' is the property representing the date and time posted
+
+    //     $results = $datastore->runQuery($query);
+
+    //     $posts = [];
+    //     foreach ($results as $post) {
+    //         $posts[] = new Post($post);
+    //     }
+
+    //     return $posts;
+    // }
+
+    // Find posts by user id
     public static function FindUserPosts($id)
     {
+
         $datastore = Database::Client();
 
         $query = $datastore->query()
-            ->kind('post')
-            ->filter('id', '=', $id) // Filter by user ID
-            ->order('datetime', 'DESCENDING'); // Assuming 'datetime' is the property representing the date and time posted
+            ->kind('post');
 
         $results = $datastore->runQuery($query);
 
         $posts = [];
-        foreach ($results as $post) {
-            $posts[] = new Post($post);
-        }
 
-        return $posts;
+        foreach ($results as $post) {
+            if ($post['id'] == $id) {
+                $posts[] = new Post($post);
+            }
+            return $posts;
+        }
+        // Return false if posts cannot be found
+        return false;
     }
 
     // Find all posts

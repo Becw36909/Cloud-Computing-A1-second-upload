@@ -46,7 +46,7 @@ class PostController extends Controller
     public static function Edit($request)
     {
 
-        $post = Post::Find($_SESSION['user']['id']);
+        $post = Post::Find($request['key']);
 
         if (!$post) {
             // If Validation fails, return user to registration page with errors.
@@ -54,10 +54,8 @@ class PostController extends Controller
             Route::Redirect('/');
 
           //  otherwise return a view for them to edit the post
-        } else (Post::Store($_SESSION['user']['id'], $_SESSION['user']['user_name'], $request['subject'], $request['message']));
-        // Return user to dashboard page with success message.
-        $_SESSION['success'] = 'Successfully created new post!';
-        Route::Redirect('/');
+        } else
+        Route::Redirect('post/edit');
     }
 
 

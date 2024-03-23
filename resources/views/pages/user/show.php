@@ -25,12 +25,12 @@
             </form>
 
             <h5>User Post Edit Area</h5>
-            <?php if (empty($userPosts)) : ?>
+            <?php if (empty($page->args['posts'])) : ?>
                 <div class="alert alert-info" role="alert">
                     No posts found.
                 </div>
             <?php else : ?>
-                <?php foreach ($userPosts as $post) : ?>
+                <?php foreach ($page->args['posts'] as $post) : ?>
                     <div class="row border border-2 rounded-3 shadow-sm p-3 mb-3">
                         <div class="col-lg-4">
                             <img src="https://placehold.co/200" />
@@ -41,7 +41,7 @@
                             <p><strong>Message:</strong> <?php echo $post->message; ?></p>
                         </div>
                         <div class="col-lg-2">
-                            <a href="/post/edit<?php echo $post->key; ?>" class="btn btn-primary">Edit</a>
+                            <a href="/post/edit?<?php echo $post->key; ?>" class="btn btn-primary">Edit</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
