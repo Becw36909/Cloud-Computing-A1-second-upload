@@ -104,8 +104,8 @@ class Post
             }
             return $posts;
         }
-        // Return false if posts cannot be found
-        return false;
+                // Return false if posts cannot be found
+                return false;
     }
 
     // Find all posts

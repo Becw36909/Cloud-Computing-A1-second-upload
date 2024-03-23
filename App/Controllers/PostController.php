@@ -51,6 +51,24 @@ class PostController extends Controller
         if (!$post) {
             // If Validation fails, return user to registration page with errors.
             $_SESSION['errors'] = ['Post not found.'];
+            Route::Redirect('user/show');
+
+          //  otherwise return a view for them to edit the post
+        } else
+        Route::Redirect('post/edit');
+    }
+
+        /**
+     * Update the logged in user's post
+     */
+    public static function Update($request)
+    {
+
+        $post = Post::Find($request['key']);
+
+        if (!$post) {
+            // If Validation fails, return user to registration page with errors.
+            $_SESSION['errors'] = ['Post not found.'];
             Route::Redirect('/');
 
           //  otherwise return a view for them to edit the post
