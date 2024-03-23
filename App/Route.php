@@ -16,6 +16,7 @@ class Route {
             switch($url) {
                 case '/' : return PostController::Index(); break;
                 case '/post/store' : return PostController::Store($_POST); break;
+                case '/post/edit' : return PostController::Edit($_GET); break;
                 case '/user' : return UserController::Show(); break;
                 case '/user/update' : return UserController::Update($_POST); break;
                 case '/logout' : return AuthController::Logout(); break;

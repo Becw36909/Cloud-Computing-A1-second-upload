@@ -9,7 +9,7 @@
 
         <br>
         <br>
-        
+
         <div class="col-lg-9">
             <form action="/user/update" method="post">
                 <h5>Password Edit Area</h5>
@@ -41,7 +41,7 @@
                             <p><strong>Message:</strong> <?php echo $post->message; ?></p>
                         </div>
                         <div class="col-lg-2">
-                            <a href="/post/edit/<?php echo $post->id; ?>" class="btn btn-primary">Edit</a>
+                            <a href="/post/edit<?php echo $post->key; ?>" class="btn btn-primary">Edit</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

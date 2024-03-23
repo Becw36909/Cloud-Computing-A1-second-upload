@@ -7,10 +7,11 @@ use App\Database;
 class User
 {
 
-    public $id, $user_name, $password;
+    public $key, $id, $user_name, $password;
 
     function __construct($user)
     {
+        $this->key = $user->key()->pathEndIdentifier() ?? null;
         $this->id = $user['id'];
         $this->user_name = $user['user_name'];
         $this->password = $user['password'];
@@ -81,7 +82,7 @@ class User
         $datastore = Database::Client();
 
         $transaction = $datastore->transaction();
-        $key = $datastore->key('user', 5700433016258560);
+        $key = $datastore->key('user', $this->key);
         $user = $transaction->lookup($key);
         $user['password'] = $newPassword;
         $transaction->update($user);

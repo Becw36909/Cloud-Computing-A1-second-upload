@@ -34,6 +34,7 @@
                         </div>
                         <div class="col-lg-6 p-3">
                             <p><strong>Date and Time Posted:</strong> <?php echo $post->datetime->format('d-m-Y H:i'); ?></p>
+                            <p><strong>Posted By:</strong> <?php echo $post->username; ?></p>
                             <p><strong>Subject:</strong> <?php echo $post->subject; ?></p>
                             <p><strong>Message:</strong> <?php echo $post->message; ?></p>
                         </div>

@@ -5,12 +5,21 @@ Namespace App\Controllers;
 use App\Route;
 use App\Models\User;
 use App\Models\Auth;
+use App\Models\Post;
+
 
 Class UserController extends Controller {
 
     public static function Show() {
 
-        return new UserController('user/show');
+        $posts = Post::FindUserPosts($_SESSION['user']['id']);
+
+        return new UserController(
+            'user/show',
+            [
+                'posts' => $posts
+            ]
+        );
         
     }
 

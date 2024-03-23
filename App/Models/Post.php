@@ -9,15 +9,38 @@ use DateTime;
 class Post
 {
 
-    public $id, $subject, $message, $datetime;
+    public $key, $id, $username, $subject, $message, $datetime;
 
     function __construct($post)
     {
+        $this->key = $post->key()->pathEndIdentifier() ?? null;
         $this->id = $post['id'];
+        $this->username = $post['user_name'];
         $this->subject = $post['subject'];
         $this->message = $post['message'];
         $this->datetime = $post['datetime'];
 
+    }
+
+    // Create/Store a new post in datastore
+    public static function Store($id, $username, $subject, $message)
+    {
+
+        $datastore = Database::Client();
+
+        // Get current date and time
+        $datetime = new DateTime();
+
+        // Create a post entity to insert into datastore.
+        $key = $datastore->key('post');
+        $entity = $datastore->entity($key, [
+            'id' => $id,
+            'user_name' => $username,
+            'subject' => $subject,
+            'message' => $message,
+            'datetime' => $datetime
+        ]);
+        $datastore->insert($entity);
     }
 
     // Find post by user ID
@@ -42,26 +65,7 @@ class Post
     }
 
 
-    // Create/Store a new user in datastore
-    public static function Store($id, $subject, $message)
-    {
-
-        $datastore = Database::Client();
-
-        // Get current date and time
-        $datetime = new DateTime();
-
-        // Create a user entity to insert into datastore.
-        $key = $datastore->key('post');
-        $entity = $datastore->entity($key, [
-            'id' => $id,
-            'subject' => $subject,
-            'message' => $message,
-            'datetime' => $datetime
-        ]);
-        $datastore->insert($entity);
-    }
-
+    // Find all post by user ID
     public static function FindUserPosts($id)
     {
         $datastore = Database::Client();
@@ -81,6 +85,7 @@ class Post
         return $posts;
     }
 
+    // Find all posts
     public static function FindRecentPosts()
     {
         $datastore = Database::Client();
@@ -100,6 +105,19 @@ class Post
 
         return $posts;
     }
-    
+
+    // Update post - FINISH
+    public function UpdatePost($newPassword)
+    {
+
+        $datastore = Database::Client();
+
+        $transaction = $datastore->transaction();
+        $key = $datastore->key('user', $this->key);
+        $user = $transaction->lookup($key);
+        $user['password'] = $newPassword;
+        $transaction->update($user);
+        $transaction->commit();
+    }
 
 }
