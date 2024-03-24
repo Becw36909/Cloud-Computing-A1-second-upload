@@ -9,7 +9,7 @@ use DateTime;
 class Post
 {
 
-    public $key, $id, $username, $subject, $message, $datetime;
+    public $key, $id, $username, $subject, $message, $created, $updated_at;
 
     function __construct($post)
     {
@@ -18,7 +18,8 @@ class Post
         $this->username = $post['user_name'];
         $this->subject = $post['subject'];
         $this->message = $post['message'];
-        $this->datetime = $post['datetime'];
+        $this->created = $post['created_at'];
+        $this->updated_at = $post['updated_at'] ?? null;
 
     }
 
@@ -29,7 +30,7 @@ class Post
         $datastore = Database::Client();
 
         // Get current date and time
-        $datetime = new DateTime();
+        $created = new DateTime();
 
         // Create a post entity to insert into datastore.
         $key = $datastore->key('post');
@@ -38,7 +39,7 @@ class Post
             'user_name' => $username,
             'subject' => $subject,
             'message' => $message,
-            'datetime' => $datetime
+            'created_at' => $created,
         ]);
         $datastore->insert($entity);
     }
@@ -64,27 +65,6 @@ class Post
         // Return false if post cannot be found
         return false;
     }
-
-
-    // Find all post by user ID
-    // public static function FindUserPosts($id)
-    // {
-    //     $datastore = Database::Client();
-
-    //     $query = $datastore->query()
-    //         ->kind('post')
-    //         ->filter('id', '=', $id) // Filter by user ID
-    //         ->order('datetime', 'DESCENDING'); // Assuming 'datetime' is the property representing the date and time posted
-
-    //     $results = $datastore->runQuery($query);
-
-    //     $posts = [];
-    //     foreach ($results as $post) {
-    //         $posts[] = new Post($post);
-    //     }
-
-    //     return $posts;
-    // }
 
     // Find posts by user id
     public static function FindUserPosts($id)
@@ -116,9 +96,9 @@ class Post
 
 
         $query = $datastore->query()
-            ->kind('post')
-            ->order('datetime', 'DESCENDING') 
-            ->limit(10);
+        ->kind('post')
+        ->order('updated_at', 'DESCENDING') 
+        ->limit(10);
 
         $results = $datastore->runQuery($query);
 
@@ -129,18 +109,24 @@ class Post
         return $posts;
     }
 
+    
+
+
     // Update post 
-    public function UpdatePost($subject, $message)
+    public function UpdatePost($key, $subject, $message)
     {
 
         $datastore = Database::Client();
 
+        $updated_at = new DateTime();
+
         $transaction = $datastore->transaction();
         $key = $datastore->key('post', $this->key);
-        $user = $transaction->lookup($key);
-        $user['subject'] = $subject;
-        $user['message'] = $message;
-        $transaction->update($user);
+        $post = $transaction->lookup($key);
+        $post['subject'] = $subject;
+        $post['message'] = $message;
+        $post['updated_at'] = $updated_at;
+        $transaction->update($post);
         $transaction->commit();
     }
 

@@ -69,21 +69,25 @@ class PostController extends Controller
      */
     public static function Update($request)
     {
+        // Validate $request['subject']) and $request['message']
+        if (empty($request['key']) || empty($request['subject']) || empty($request['message'])) {
+            // If Validation fails, return user to edit page with errors.
+            $_SESSION['errors'] = ['Post must have a subject and message.'];
+            Route::Redirect("/post/edit?key=".$request['key']);
+        }
 
+        // Try to get Post from system based off key
         $post = Post::Find($request['key']);
 
         if (!$post) {
-            // If Validation fails, return user to registration page with errors.
+            // If Validation fails, return user to edit page with errors.
             $_SESSION['errors'] = ['Post not found.'];
-            Route::Redirect('/');
+            Route::Redirect("/post/edit?key=".$request['key']);
         } 
-        if (empty($request['subject']) || empty($request['message'])) {
-            // If Validation fails, return user to registration page with errors.
-            $_SESSION['errors'] = ['Post must have a subject and message.'];
-            Route::Redirect('/');
-        }
-        else ($post->UpdatePost($request['subject'], $request['message'] ));
-        // Return user to login page with success message.
+
+        $post->UpdatePost($request['key'], $request['subject'], $request['message'] );
+        
+        // Return user to dashboard page with success message.
         $_SESSION['success'] = 'Post updated!';
             Route::Redirect('/');
     }

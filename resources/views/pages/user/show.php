@@ -36,7 +36,11 @@
                             <img src="https://placehold.co/200" />
                         </div>
                         <div class="col-lg-6 p-3">
-                            <p><strong>Date and Time Posted:</strong> <?php echo $post->datetime->format('d-m-Y H:i'); ?></p>
+                        <?php if ($post->updated_at != null) : ?>
+                                <p><strong>Updated At:</strong> <?php echo $post->updated_at->format('d-m-Y H:i'); ?></p>
+                            <?php endif; ?>
+
+                            <p><strong>Date and Time Posted:</strong> <?php echo $post->created->format('d-m-Y H:i'); ?></p>
                             <p><strong>Subject:</strong> <?php echo $post->subject; ?></p>
                             <p><strong>Message:</strong> <?php echo $post->message; ?></p>
                         </div>
