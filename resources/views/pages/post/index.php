@@ -18,16 +18,21 @@
             </h2>
         </div>
 
-        <?php echo $_SESSION['user']['image_path']; ?>
-
-
         <div class="col-lg-9">
+            <!-- Submit Post Form -->
 
-            <form action="/post/store" method="post">
+            <form action="/post/store" method="post" enctype="multipart/form-data">
                 <h5>Create a new post</h5>
                 <input class="form-control" input type="text" id="subject" name="subject" rows="1" placeholder="Subject"></input>
 
                 <textarea class="form-control" id="message" name="message" rows="3" placeholder="Whats on your mind..."></textarea>
+                <!-- File Upload Field -->
+                <div class="form-floating mb-3">
+                    <input type="file" class="form-control" name="image" id="image" accept="image/*">
+                    <label for="image">Upload Image</label>
+                </div>
+                <!-- Hidden input field for image path -->
+                <input type="hidden" name="image_path" id="image_path">
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="submit" class="btn btn-primary mt-3">Submit New Post</button>
@@ -44,7 +49,7 @@
                 <?php foreach ($page->args['posts'] as $post) : ?>
                     <div class="row border border-2 rounded-3 shadow-sm p-3 mb-3">
                         <div class="col-lg-4">
-                            <img src="https://placehold.co/200" />
+                            <img src="<?php echo $post->image_path; ?>" />
                         </div>
                         <div class="col-lg-6 p-3">
                             <?php if ($post->updated_at != $post->created) : ?>

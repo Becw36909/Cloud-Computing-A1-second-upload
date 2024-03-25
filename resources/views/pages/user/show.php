@@ -1,7 +1,18 @@
 <main class="container mx-auto">
     <div class="row gx-5">
         <div class="col-lg-3 p-3 text-center">
-            <img src="https://placehold.co/120" />
+            <?php
+            // Retrieve the URL of the user's image from the session
+            $imageUrl = $_SESSION['user']['image_path'] ?? null;
+            ?>
+            <!-- Check if $imageUrl is not null -->
+            <?php if ($imageUrl !== null) : ?>
+                <!-- Display user's image with correct size -->
+                <img src="<?php echo $imageUrl; ?>" style="width: 120px; height: 120px;" />
+            <?php else : ?>
+                <!-- If $imageUrl is null, display a placeholder image -->
+                <img src="https://placehold.co/120" />
+            <?php endif; ?>
             <h2 class="fw-normal">
                 <a href="/user"><?php echo $_SESSION['user']['user_name'] ?></a>
             </h2>
@@ -33,10 +44,10 @@
                 <?php foreach ($page->args['posts'] as $post) : ?>
                     <div class="row border border-2 rounded-3 shadow-sm p-3 mb-3">
                         <div class="col-lg-4">
-                            <img src="https://placehold.co/200" />
+                            <img src="<?php echo $post->image_path; ?>" />
                         </div>
                         <div class="col-lg-6 p-3">
-                        <?php if ($post->updated_at != $post->created) : ?>
+                            <?php if ($post->updated_at != $post->created) : ?>
                                 <p><strong>Updated At:</strong> <?php echo $post->updated_at->format('d-m-Y H:i'); ?></p>
                             <?php endif; ?>
 

@@ -40,11 +40,31 @@ class PostController extends Controller
     public static function Store($request)
     {
 
-        if (empty($request['subject']) || empty($request['message'])) {
+        if (empty($request['subject']) || empty($request['message']) ) {
             // If Validation fails, return user to registration page with errors.
-            $_SESSION['errors'] = ['Post must have a subject and message.'];
+            $_SESSION['errors'] = ['Post must have all fields filled out.'];
             Route::Redirect('/');
-        } else (Post::Store($_SESSION['user']['id'], $_SESSION['user']['user_name'], $request['subject'], $request['message']));
+        }
+
+        // Check if the image is uploaded
+        if (!empty($_FILES['image']['tmp_name'])) {
+            // Get the file name provided by the user
+            $fileName = $_FILES['image']['name'];
+
+            // Handle image upload and store it in Google Cloud Storage
+            $uploadedImagePath = Storage::UploadImageToCloudStorage($_FILES['image'], $fileName);
+
+            // Add the path to the uploaded image to the request
+            $request['image_path'] = $uploadedImagePath;
+        } else {
+            // If image is empty, return an error message
+            $_SESSION['errors'] = ['Image is required.'];
+            Route::Redirect('/');
+        }
+        
+        
+        Post::Store($_SESSION['user']['id'], $_SESSION['user']['user_name'], 
+        $request['subject'], $request['message'], $request['image_path']);
         // Return user to dashboard page with success message.
         $_SESSION['success'] = 'Successfully created new post!';
         Route::Redirect('/');
@@ -82,10 +102,26 @@ class PostController extends Controller
         // Validate $request['subject']) and $request['message']
         if (empty($request['key']) || empty($request['subject']) || empty($request['message'])) {
             // If Validation fails, return user to edit page with errors.
-            $_SESSION['errors'] = ['Post must have a subject and message.'];
+            $_SESSION['errors'] = ['Post must have all fields filled out.'];
             Route::Redirect("/post/edit?key=".$request['key']);
         }
 
+        // Check if the image is uploaded
+        if (!empty($_FILES['image']['tmp_name'])) {
+            // Get the file name provided by the user
+            $fileName = $_FILES['image']['name'];
+
+            // Handle image upload and store it in Google Cloud Storage
+            $uploadedImagePath = Storage::UploadImageToCloudStorage($_FILES['image'], $fileName);
+
+            // Add the path to the uploaded image to the request
+            $request['image_path'] = $uploadedImagePath;
+        } else {
+            // If image is empty, return an error message
+            $_SESSION['errors'] = ['Image is required.'];
+            Route::Redirect('/');
+        }
+                
         // Try to get Post from system based off key
         $post = Post::Find($request['key']);
 
@@ -93,9 +129,9 @@ class PostController extends Controller
             // If Validation fails, return user to edit page with errors.
             $_SESSION['errors'] = ['Post not found.'];
             Route::Redirect("/post/edit?key=".$request['key']);
-        } 
+        }
 
-        $post->UpdatePost($request['key'], $request['subject'], $request['message'] );
+        $post->UpdatePost($request['key'], $request['subject'], $request['message'], $request['image_path'] );
         
         // Return user to dashboard page with success message.
         $_SESSION['success'] = 'Post updated!';

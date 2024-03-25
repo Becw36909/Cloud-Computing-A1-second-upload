@@ -9,7 +9,7 @@ use DateTime;
 class Post
 {
 
-    public $key, $id, $username, $subject, $message, $created, $updated_at;
+    public $key, $id, $username, $subject, $message, $created, $updated_at, $image_path;
 
     function __construct($post)
     {
@@ -20,11 +20,12 @@ class Post
         $this->message = $post['message'];
         $this->created = $post['created_at'];
         $this->updated_at = $post['updated_at'];
+        $this->image_path = $post['image_path'];
 
     }
 
     // Create/Store a new post in datastore
-    public static function Store($id, $username, $subject, $message)
+    public static function Store($id, $username, $subject, $message, $image_path)
     {
 
         $datastore = Database::Client();
@@ -41,6 +42,7 @@ class Post
             'message' => $message,
             'created_at' => $created,
             'updated_at' => $created,
+            'image_path' => $image_path,
 
         ]);
         $datastore->insert($entity);
@@ -113,7 +115,7 @@ class Post
 
     
     // Update post 
-    public function UpdatePost($key, $subject, $message)
+    public function UpdatePost($key, $subject, $message, $image_path)
     {
 
         $datastore = Database::Client();
@@ -126,6 +128,7 @@ class Post
         $post['subject'] = $subject;
         $post['message'] = $message;
         $post['updated_at'] = $updated_at;
+        $post['image_path'] = $image_path;
         $transaction->update($post);
         $transaction->commit();
     }
