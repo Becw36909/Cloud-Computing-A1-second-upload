@@ -36,7 +36,7 @@
                             <img src="https://placehold.co/200" />
                         </div>
                         <div class="col-lg-6 p-3">
-                        <?php if ($post->updated_at != null) : ?>
+                        <?php if ($post->updated_at != $post->created) : ?>
                                 <p><strong>Updated At:</strong> <?php echo $post->updated_at->format('d-m-Y H:i'); ?></p>
                             <?php endif; ?>
 

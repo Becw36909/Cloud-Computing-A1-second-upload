@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Route;
 use App\Models\Post;
+use App\Storage;
 
 class PostController extends Controller
 {
@@ -14,6 +15,15 @@ class PostController extends Controller
     public static function Index()
     {
         $posts = Post::FindRecentPosts();
+
+//         // Check if the image path is not null
+//         if ($_SESSION['user']['image_path'] !== null) {
+//             // Retrieve the user's image data only if the image path is not null
+//             $imagePath = Storage::GetImageDataFromBucket($_SESSION['user']['id']);
+
+//             // Add image data to the user session details
+//             $_SESSION['user']['image_path'] = $imagePath;
+// }
 
         return new PostController(
             'post/index',

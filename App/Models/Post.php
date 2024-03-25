@@ -19,7 +19,7 @@ class Post
         $this->subject = $post['subject'];
         $this->message = $post['message'];
         $this->created = $post['created_at'];
-        $this->updated_at = $post['updated_at'] ?? null;
+        $this->updated_at = $post['updated_at'];
 
     }
 
@@ -40,6 +40,8 @@ class Post
             'subject' => $subject,
             'message' => $message,
             'created_at' => $created,
+            'updated_at' => $created,
+
         ]);
         $datastore->insert($entity);
     }
@@ -110,8 +112,6 @@ class Post
     }
 
     
-
-
     // Update post 
     public function UpdatePost($key, $subject, $message)
     {

@@ -7,7 +7,7 @@ use App\Database;
 class User
 {
 
-    public $key, $id, $user_name, $password;
+    public $key, $id, $user_name, $password, $imagePath;
 
     function __construct($user)
     {
@@ -15,6 +15,8 @@ class User
         $this->id = $user['id'];
         $this->user_name = $user['user_name'];
         $this->password = $user['password'];
+        // Set imagePath to 'image_path' if it exists, otherwise set to null
+        $this->imagePath = $user['image_path'] ?? null;
     }
 
     // Find user by user ID
@@ -60,7 +62,7 @@ class User
     }
 
     // Create/Store a new user in datastore
-    public static function Register($id, $username, $password)
+    public static function Register($id, $username, $password, $imagePath)
     {
 
         $datastore = Database::Client();
@@ -71,6 +73,7 @@ class User
             'id' => $id,
             'user_name' => $username,
             'password' => $password,
+            'image_path' => $imagePath // Include the image path in the entity
         ]);
         $datastore->insert($entity);
     }

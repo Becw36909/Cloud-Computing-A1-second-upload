@@ -4,6 +4,7 @@ Namespace App\Controllers;
 
 use App\Route;
 use App\Models\Auth;
+use App\Storage;
 
 Class AuthController extends Controller {
 
@@ -72,12 +73,32 @@ Class AuthController extends Controller {
             // If Validation fails, return user to registration page with errors.
             $_SESSION['errors'] = ['Invalid Username' => 'User Name is already in use.'];
             Route::Redirect('/register');
-        } 
-        
-        else (Auth::Register($request['id'], $request['username'], $request['password']));
+        }
+
+        // Check if the image is uploaded
+        if (!empty($_FILES['image']['tmp_name'])) {
+            // Get the file name provided by the user
+            $fileName = $_FILES['image']['name'];
+
+            // Handle image upload and store it in Google Cloud Storage
+            $uploadedImagePath = Storage::UploadImageToCloudStorage($_FILES['image'], $fileName);
+
+            // Add the path to the uploaded image to the request
+            $request['image_path'] = $uploadedImagePath;
+        } else {
+            // If image is empty, return an error message
+            $_SESSION['errors'] = ['Image is required.'];
+            Route::Redirect('/register');
+        }
+
+
+        // Register the user including the image path
+        Auth::Register($request['id'], $request['username'], $request['password'], $request['image_path']);
+
         // Return user to login page with success message.
         $_SESSION['success'] = 'Registration Successful!';
         Route::Redirect('/');
     }
+    
     
 }

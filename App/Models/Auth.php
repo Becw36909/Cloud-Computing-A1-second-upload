@@ -55,9 +55,9 @@ class Auth {
         } 
     }
 
-    public static function Register($id, $username, $password) {
+    public static function Register($id, $username, $password, $imagePath) {
 
-        User::Register($id, $username, $password);
+        User::Register($id, $username, $password, $imagePath);
 
         return true;
     }

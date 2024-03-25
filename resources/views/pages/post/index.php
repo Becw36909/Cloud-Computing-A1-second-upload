@@ -1,14 +1,27 @@
 <main class="container mx-auto">
     <div class="row gx-5">
-        <div class="col-lg-3 p-3  text-center">
-            <img src="https://placehold.co/120" />
+        <div class="col-lg-3 p-3 text-center">
+            <?php
+            // Retrieve the URL of the user's image from the session
+            $imageUrl = $_SESSION['user']['image_path'] ?? null;
+            ?>
+            <!-- Check if $imageUrl is not null -->
+            <?php if ($imageUrl !== null) : ?>
+                <!-- Display user's image with correct size -->
+                <img src="<?php echo $imageUrl; ?>" style="width: 120px; height: 120px;" />
+            <?php else : ?>
+                <!-- If $imageUrl is null, display a placeholder image -->
+                <img src="https://placehold.co/120" />
+            <?php endif; ?>
             <h2 class="fw-normal">
-                <a href="/user"><?php echo $_SESSION['user']['user_name']  ?></a>
+                <a href="/user"><?php echo $_SESSION['user']['user_name']; ?></a>
             </h2>
         </div>
 
-        <div class="col-lg-9">
+        <?php echo $_SESSION['user']['image_path']; ?>
 
+
+        <div class="col-lg-9">
 
             <form action="/post/store" method="post">
                 <h5>Create a new post</h5>
@@ -34,10 +47,10 @@
                             <img src="https://placehold.co/200" />
                         </div>
                         <div class="col-lg-6 p-3">
-                            <?php if ($post->updated_at != null) : ?>
+                            <?php if ($post->updated_at != $post->created) : ?>
                                 <p><strong>Updated At:</strong> <?php echo $post->updated_at->format('d-m-Y H:i'); ?></p>
                             <?php endif; ?>
-                            <p><strong>Created At:</strong> <?php echo $post->created->format('d-m-Y H:i'); ?></p>
+                            <p><strong>Date and Time Posted:</strong> <?php echo $post->created->format('d-m-Y H:i'); ?></p>
                             <p><strong>Posted By:</strong> <?php echo $post->username; ?></p>
                             <p><strong>Subject:</strong> <?php echo $post->subject; ?></p>
                             <p><strong>Message:</strong> <?php echo $post->message; ?></p>
